@@ -27,30 +27,44 @@ Claude reads that on activation and enforces the matching rules for the rest of 
 
 Copy `commands/focus.md` into your Claude Code commands directory:
 
+**macOS / Linux / WSL:**
 ```bash
 cp commands/focus.md ~/.claude/commands/focus.md
+```
+
+**Windows (PowerShell):**
+```powershell
+copy commands\focus.md $env:USERPROFILE\.claude\commands\focus.md
 ```
 
 That's enough to use `/focus`. The statusline badge is optional.
 
 ### 2. (Optional) Add the statusline badge
 
-Copy the statusline script and wire it up in your Claude Code settings:
+Pick the script for your platform, copy it, then wire it up in `~/.claude/settings.json`.
 
+**macOS / Linux / WSL — `focus-statusline.sh`:**
 ```bash
 cp focus-statusline.sh ~/.claude/focus-statusline.sh
 chmod +x ~/.claude/focus-statusline.sh
 ```
 
-Then point Claude Code at it in `~/.claude/settings.json`:
+**Windows — `focus-statusline.ps1`:**
+```powershell
+copy focus-statusline.ps1 $env:USERPROFILE\.claude\focus-statusline.ps1
+```
+
+**Both platforms** — add to `~/.claude/settings.json` (or `%USERPROFILE%\.claude\settings.json` on Windows):
 
 ```json
 {
-  "statusCommand": "~/.claude/focus-statusline.sh"
+  "statusCommand": "focus-statusline"
 }
 ```
 
-> **Note:** `focus-statusline.sh` is written to also render the [ponytail](https://github.com/flamfoof/ponytail) statusline segment if you have that plugin installed. If you don't use ponytail, the badge still works — ponytail's segment is just skipped silently.
+> **Why `"focus-statusline"` without a path?** Claude Code looks up bare names in its own directory (`~/.claude/`), so the file resolves automatically on both platforms. Replace with the absolute path if it doesn't.
+>
+> Both scripts also render the [ponytail](https://github.com/flamfoof/ponytail) statusline badge when that plugin is installed — skipped silently if absent.
 
 ---
 
@@ -93,15 +107,26 @@ The skill is intentionally easy to extend. Three places to touch:
 
 **1. `commands/focus.md`** — add a new `If the argument is **<name>**:` block following the same pattern as `design` and `coding`. Define what the mode allows and what it refuses.
 
-**2. `focus-statusline.sh`** — add a `case` arm for the new mode name:
+**2. `focus-statusline.sh` / `focus-statusline.ps1`** — add a new branch in both:
 
+**`focus-statusline.sh` (bash):**
 ```bash
 case "$mode" in
-  design) badge=$'\033[1;36m\xF0\x9F\x8E\xA8 FOCUS:DESIGN\033[0m' ;;
-  coding) badge=$'\033[1;33m\xE2\x9A\x99 FOCUS:CODING\033[0m'  ;;
-  review) badge=$'\033[1;35m\xF0\x9F\x94\x8D FOCUS:REVIEW\033[0m' ;;  # ← new
-  *)      badge=$'\033[90m\xE2\x97\x8B FOCUS:none\033[0m'      ;;
+  design) badge=$'\033[1;36m🎨 FOCUS:DESIGN\033[0m' ;;
+  coding) badge=$'\033[1;33m⚙ FOCUS:CODING\033[0m'  ;;
+  review) badge=$'\033[1;35m🔍 FOCUS:REVIEW\033[0m' ;;  # ← new
+  *)      badge=$'\033[90m○ FOCUS:none\033[0m'      ;;
 esac
+```
+
+**`focus-statusline.ps1` (PowerShell):**
+```powershell
+$badge = switch ($mode) {
+  "design" { "${ESC}[1;36m🎨 FOCUS:DESIGN${ESC}[0m" }
+  "coding" { "${ESC}[1;33m⚙ FOCUS:CODING${ESC}[0m" }
+  "review" { "${ESC}[1;35m🔍 FOCUS:REVIEW${ESC}[0m" }  # ← new
+  default  { "${ESC}[90m○ FOCUS:none${ESC}[0m" }
+}
 ```
 
 Pick any ANSI color and emoji. The state file mechanism requires no changes — it just writes whatever word you pass as the argument.
@@ -114,8 +139,9 @@ Pick any ANSI color and emoji. The state file mechanism requires no changes — 
 
 ```
 commands/
-  focus.md          ← the skill (drop into ~/.claude/commands/)
-focus-statusline.sh ← optional statusline badge
+  focus.md              ← the skill (drop into ~/.claude/commands/)
+focus-statusline.sh     ← optional badge (macOS / Linux / WSL)
+focus-statusline.ps1    ← optional badge (Windows / PowerShell)
 ```
 
 ---
