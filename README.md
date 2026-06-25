@@ -25,19 +25,19 @@ Claude reads that on activation and enforces the matching rules for the rest of 
 
 ### 1. Add the skill
 
-Copy `commands/focus.md` into your Claude Code commands directory:
+Copy `commands/focus-mode.md` into your Claude Code commands directory:
 
 **macOS / Linux / WSL:**
 ```bash
-cp commands/focus.md ~/.claude/commands/focus.md
+cp commands/focus-mode.md ~/.claude/commands/focus-mode.md
 ```
 
 **Windows (PowerShell):**
 ```powershell
-copy commands\focus.md $env:USERPROFILE\.claude\commands\focus.md
+copy commands\focus-mode.md $env:USERPROFILE\.claude\commands\focus-mode.md
 ```
 
-That's enough to use `/focus`. The statusline badge is optional.
+That's enough to use `/focus-mode`. The statusline badge is optional.
 
 ### 2. (Optional) Add the statusline badge
 
@@ -77,9 +77,9 @@ In any Claude Code chat, run:
 
 | Command | Effect |
 |---|---|
-| `/focus design` | Lock to design/architecture only |
-| `/focus coding` | Lock to coding/implementation only |
-| `/focus off` | Clear — behave normally |
+| `/focus-mode design` | Lock to design/architecture only |
+| `/focus-mode coding` | Lock to coding/implementation only |
+| `/focus-mode off` | Clear — behave normally |
 
 Claude acknowledges the mode in one line, then enforces it for the rest of the session.
 
@@ -108,7 +108,7 @@ Claude acknowledges the mode in one line, then enforces it for the rest of the s
 
 The skill is intentionally easy to extend. Three places to touch:
 
-**1. `commands/focus.md`** — add a new `If the argument is **<name>**:` block following the same pattern as `design` and `coding`. Define what the mode allows and what it refuses.
+**1. `commands/focus-mode.md`** — add a new `If the argument is **<name>**:` block following the same pattern as `design` and `coding`. Define what the mode allows and what it refuses.
 
 **2. `focus-statusline.sh` / `focus-statusline.ps1`** — add a new branch in both:
 
@@ -142,7 +142,7 @@ Pick any ANSI color and emoji. The state file mechanism requires no changes — 
 
 ```
 commands/
-  focus.md              ← the skill (drop into ~/.claude/commands/)
+  focus-mode.md         ← the skill (drop into ~/.claude/commands/)
 focus-statusline.sh     ← optional badge (macOS / Linux / WSL)
 focus-statusline.ps1    ← optional badge (Windows / PowerShell)
 ```

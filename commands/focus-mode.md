@@ -1,6 +1,6 @@
 Set this chat's focus mode based on the argument: "design", "coding", or "off".
 
-The user invoked `/focus` with argument: ARGUMENTS.
+The user invoked `/focus-mode` with argument: ARGUMENTS.
 
 **Your job: do both steps below — first persist, then enforce.**
 
