@@ -66,8 +66,6 @@ copy focus-statusline.ps1 $env:USERPROFILE\.claude\focus-statusline.ps1
 ```
 
 > **Why `"focus-statusline"` without a path?** Claude Code looks up bare names in its own directory (`~/.claude/`), so the file resolves automatically on both platforms. Replace with an absolute path if it doesn't.
->
-> Both scripts also render the [ponytail](https://github.com/flamfoof/ponytail) statusline badge when that plugin is installed — skipped silently if absent.
 
 ---
 
